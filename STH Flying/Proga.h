@@ -1,9 +1,9 @@
 #pragma once
 
-#include <SDL.h>
+#include <SDL2/SDL.h>
 #include <iostream>
-#include <SDL_ttf.h>
-#include <SDL_image.h>
+#include <SDL2/SDL_ttf.h>
+#include <SDL2/SDL_image.h>
 #include "Window.h"
 #include "Texture.h"
 #include <string>
@@ -17,11 +17,11 @@ public:
     ~Proga();
     int Koldunstvo();
 private:
-    //Переменная основного цикла
+    //пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ
     bool IsRunning = true;
 
-    //2 окна нашей программы
-    Window Window;
+    //2 пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
+    Window window;
 
 };
 

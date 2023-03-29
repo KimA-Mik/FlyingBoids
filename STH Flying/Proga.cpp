@@ -10,8 +10,8 @@ Proga::Proga()
 		if (!SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "1"))
 			printf("Warning: Linear texture filtering not enabled!");
 
-		if (!Window.init("Lovushka Jocker'a", 1280, 720)) {
-			printf("Windows could not be created! SDL Error: %s\n", SDL_GetError());
+		if (!window.init("Lovushka Jocker'a", 1280, 720)) {
+			printf("Window could not be created! SDL Error: %s\n", SDL_GetError());
 			IsRunning = false;
 		}
 		else {
@@ -34,7 +34,7 @@ Proga::Proga()
 Proga::~Proga()
 {
 	//Уничтожаем окна
-	Window.free();
+	window.free();
 
 	//Закрываем SDL
 	TTF_Quit();
@@ -57,10 +57,10 @@ int Proga::Koldunstvo()
 			}
 		}
 		SDL_Event* ePoint = &e;
-		Window.handleEvent(e);
-		Window.render();
+		window.handleEvent(e);
+		window.render();
 		
-		if (!Window.isShown())
+		if (!window.isShown())
 			IsRunning = false;
 
 	}

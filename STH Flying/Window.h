@@ -1,5 +1,5 @@
 #pragma once
-#include <SDL.h>
+#include <SDL2/SDL.h>
 #include <iostream>
 #include <memory>
 #include "Fly.h"
@@ -13,26 +13,26 @@ public:
 	Window();
 	~Window();
 
-	//Создание самого окна
+	//пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ
 	bool init(std::string Name, int WWidth = 640, int WHeight = 480, int XPos = SDL_WINDOWPOS_UNDEFINED, int YPos = SDL_WINDOWPOS_UNDEFINED);
 
-	//Обработка событий окна
+	//пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ
 	void handleEvent(SDL_Event& e);
 
-	//Переводит фокус на окно
+	//пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅ
 	void focus();
 
-	//Отрисовывает данные в окно
+	//пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅ
 	void render();
 
-	//Очищает данные по внутренним указателям
+	//пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
 	void free();
 
-	//Размеры окна
+	//пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ
 	int getWidth()			{ return mWidth; }
 	int getHeight()			{ return mHeight; }
 
-	//Парамеры окна
+	//пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ
 	bool hasMouseFocus()	{ return mMouseFocus; }
 	bool hasKeyboardFocus()	{ return mKeyboardFocus; }
 	bool isMinimized()		{ return mMinimized; }
@@ -40,7 +40,7 @@ public:
 
 
 private:
-	//Данные самого окна
+	//пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ
 	SDL_Window* mWindow;
 	SDL_Renderer* mRenderer;
 	int mWindowID;
