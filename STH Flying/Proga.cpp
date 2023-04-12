@@ -15,14 +15,12 @@ Proga::Proga()
 			IsRunning = false;
 		}
 		else {
-			//Загрузка PNG
 			int imgFlags = IMG_INIT_PNG;
 			if (!(IMG_Init(imgFlags) & imgFlags)) {
 				printf("SDL_image could not initialize! SDL_image Error: %s\n", IMG_GetError());
 				IsRunning = false;
 			}
 
-			//SDL_ttf
 			if (TTF_Init() == -1) {
 				printf("SDL_ttf could not initialize! SDL_ttf Error: %s\n", TTF_GetError());
 				IsRunning = false;
@@ -33,10 +31,8 @@ Proga::Proga()
 
 Proga::~Proga()
 {
-	//Уничтожаем окна
 	window.free();
 
-	//Закрываем SDL
 	TTF_Quit();
 	IMG_Quit();
 	SDL_Quit();
@@ -47,17 +43,14 @@ int Proga::Koldunstvo()
 {
 
 	SDL_Event e;
-	//основной цикл
 	while (IsRunning)
 	{
 		while (SDL_PollEvent(&e) != 0){
-			//Запрос на выход
 			if (e.type == SDL_QUIT){
 				IsRunning = false;
 			}
+			window.handleEvent(e);
 		}
-		SDL_Event* ePoint = &e;
-		window.handleEvent(e);
 		window.render();
 		
 		if (!window.isShown())

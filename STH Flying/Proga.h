@@ -17,11 +17,7 @@ public:
     ~Proga();
     int Koldunstvo();
 private:
-    //���������� ��������� �����
     bool IsRunning = true;
-
-    //2 ���� ����� ���������
     Window window;
-
 };
 

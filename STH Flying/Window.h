@@ -6,6 +6,7 @@
 #include "Timer.h"
 #include <vector>
 #include <sstream>
+#include <array>
 
 
 class Window{
@@ -40,6 +41,7 @@ public:
 
 
 private:
+	void updateWindowSize(int width, int height);
 	//������ ������ ����
 	SDL_Window* mWindow;
 	SDL_Renderer* mRenderer;
@@ -63,5 +65,6 @@ private:
 
 	std::vector<std::unique_ptr<Fly>> Objects;
 	std::vector<ObjStats> StatsList;
+	std::array<Texture, 7> Textures;
 
 };

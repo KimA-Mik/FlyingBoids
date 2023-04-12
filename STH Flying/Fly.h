@@ -15,10 +15,6 @@ struct ObjStats
 
 class Fly{
 protected:
-	
-
-	Texture* Img = nullptr;
-
 	SDL_Point ImgCenter;
 
 	double Angle;
@@ -29,15 +25,13 @@ protected:
 	double Fov = 90;
 
 	double Vel = 200;
+	Texture* Img = nullptr;
 
 public:
-	Fly();
-	virtual ~Fly();
+
 
 	virtual void Render(SDL_Renderer* Renderer);
 	virtual void Move(Uint32 ElapsedTime);
-	virtual void Free();
-
 	
 	
 	void SetScreenParams(int Width, int Height){
@@ -55,7 +49,7 @@ public:
 		return  Res;
 	}
 
-	void CheckCollisions(const std::vector<ObjStats> List, Uint32 ElapsedTime, SDL_Renderer* renderer);
+	void CheckCollisions(const std::vector<ObjStats>& List, Uint32 ElapsedTime, SDL_Renderer* renderer);
 
 };
 
@@ -65,12 +59,9 @@ private:
 	
 
 public:
-	Bird(SDL_Renderer* Renderer, int x = 0, int y = 0, double Ang = 30);
-	~Bird();
+	Bird(int x, int y, double Ang, Texture* texture);
 	
 	void Render(SDL_Renderer* Renderer) override;
 	void Move(Uint32 ElapsedTime) override;
-	void Free() override;
-
 };
 
