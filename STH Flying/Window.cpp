@@ -77,6 +77,7 @@ bool Window::init(std::string Name, int WWidth, int WHeight, int XPos, int YPos)
 
 void Window::handleEvent(SDL_Event& e)
 {
+	int w, h;
 	//If an event was detected for this window
 	if (e.type == SDL_WINDOWEVENT /*&& e.window.windowID == mWindowID*/ && LastEventTime != e.window.timestamp)
 	{
@@ -145,15 +146,20 @@ void Window::handleEvent(SDL_Event& e)
 
 			//Window maxized
 		case SDL_WINDOWEVENT_MAXIMIZED:
-			SDL_Log("SDL_WINDOWEVENT_MAXIMIZED\n");
-			//updateWindowSize(e.window.data1, e.window.data2);
+			// SDL_GL_GetDrawableSize(mWindow, &w, &h);
+			SDL_GetWindowSize(mWindow, &w, &h);
+			SDL_Log("SDL_WINDOWEVENT_MAXIMIZED(%d:%d)\n", w, h);
+			updateWindowSize(w, h);
 			mMinimized = false;
 			break;
 
 			//Window restored
 		case SDL_WINDOWEVENT_RESTORED:
-			//updateWindowSize(e.window.data1, e.window.data2);
-			SDL_Log("SDL_WINDOWEVENT_RESTORED\n");
+			// SDL_GL_GetDrawableSize(mWindow, &w, &h);
+			SDL_GetWindowSize(mWindow, &w, &h);
+			updateWindowSize(w, h);
+
+			SDL_Log("SDL_WINDOWEVENT_RESTORED(%d:%d)\n", w, h);
 			mMinimized = false;
 			break;
 
@@ -190,7 +196,7 @@ void Window::render()
 {
 	ElapsedTime = mTimer.getTicks() - PrevTime;
 	std::stringstream Title;
-	Title << "Awesome boids    FPS: " << 1000.f / ElapsedTime;
+	Title << "Awesome boids    FPS: " << int(1000 / ElapsedTime);
 	SDL_SetWindowTitle(mWindow, Title .str().c_str());
 	PrevTime = mTimer.getTicks();
 	
