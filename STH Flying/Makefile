@@ -6,7 +6,8 @@ OUT_DIR = build
 
 all: directories main.o Fly.o Proga.o Texture.o Timer.o Window.o
 	cd $(OUT_DIR); \
-	$(CC) main.o Fly.o Proga.o Texture.o Timer.o Window.o $(SDL2) -o main
+	$(CC) main.o Fly.o Proga.o Texture.o Timer.o Window.o $(SDL2) -o main; \
+	rm -rf *.o
 
 directories: $(OUT_DIR)
 
@@ -32,6 +33,5 @@ Timer.o: Timer.cpp
 	$(CC) $(CFLAGS) Timer.cpp -o $(OUT_DIR)/Timer.o
 
 clean:
-	rm -rf */*.o
- 
- 
+	rm -rf ./build
+	

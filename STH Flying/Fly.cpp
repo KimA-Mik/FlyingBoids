@@ -10,9 +10,8 @@ void Fly::Move(Uint32 ElapsedTime) {
 void Fly::CheckCollisions(const std::vector<ObjStats>& List, Uint32 ElapsedTime, SDL_Renderer* renderer)
 {
 	double Step = ElapsedTime / 1000.f;
-	const double dAng = 0.05f;
-	int XCoord = (xPos + Img->getWidth() / 2), SrX = 0;
-	int YCoord = (yPos + Img->getHeight() / 2), SrY = 0;
+	double XCoord = (xPos + Img->getWidth() / 2), SrX = 0;
+	double YCoord = (yPos + Img->getHeight() / 2), SrY = 0;
 	double SrArifm = 0.0f;
 	int ArifmCount = 0;
 	for (const auto& Object : List) {
@@ -43,13 +42,13 @@ void Fly::CheckCollisions(const std::vector<ObjStats>& List, Uint32 ElapsedTime,
 		SrArifm /= ArifmCount;
 		SrX /= ArifmCount;
 		SrY /= ArifmCount;
-		SDL_Point velVect = { XCoord - prevX,YCoord - prevY };
-		SDL_Point targVect = { SrX - prevX,SrY - prevY };
+		dPoint velVect = { XCoord - prevX,YCoord - prevY };
+		dPoint targVect = { SrX - prevX,SrY - prevY };
 		int ProizvVec = velVect.x * targVect.x + velVect.y * targVect.y;
 		double ProizvAbsVec = sqrt(velVect.x * velVect.x + velVect.y * velVect.y) * sqrt(targVect.x * targVect.x + targVect.y * targVect.y);
-		if (ProizvAbsVec != 0) {
-			double CosPhi = ProizvVec / (int)ProizvAbsVec;
-			double dAng = acos(CosPhi) * 180. / M_PI;;
+		if ((int)ProizvAbsVec != 0) {
+			double CosPhi = ProizvVec / ProizvAbsVec;
+			double dAng = acos(CosPhi) * 180. / M_PI;
 			//Angle += (SrArifm - Angle) * Step;
 			if (dAng > 165 && dAng < 195) {
 				Vel = 100;
@@ -71,9 +70,9 @@ void Fly::CheckCollisions(const std::vector<ObjStats>& List, Uint32 ElapsedTime,
 		//if (RayAng < 0)
 			//RayAng = 360 - RayAng;
 		for (int i = -5; i < 61; i += 10){
-			int x = XCoord + i * cos(RayAng * M_PI / 180.);
-			int y = YCoord + i * sin(RayAng * M_PI / 180.);
-			//SDL_RenderDrawPoint(renderer, x, y);
+			int x = XCoord + i * cos(RayAng * M_PI / 180.0);
+			int y = YCoord + i * sin(RayAng * M_PI / 180.0);
+			// SDL_RenderDrawPoint(renderer, x, y);
 
 			for (const auto& Object : List) {
 				if (abs(x - Object.X) < 20 && abs(y - Object.Y) < 20)
@@ -85,9 +84,9 @@ void Fly::CheckCollisions(const std::vector<ObjStats>& List, Uint32 ElapsedTime,
 		//if (RayAng > 360)
 			//RayAng = RayAng - 360;
 		for (int i = -5; i < 61; i += 10) {
-			int x = XCoord + i * cos(RayAng * M_PI / 180.);
-			int y = YCoord + i * sin(RayAng * M_PI / 180.);
-			//SDL_RenderDrawPoint(renderer, x, y);
+			int x = XCoord + i * cos(RayAng * M_PI / 180.0);
+			int y = YCoord + i * sin(RayAng * M_PI / 180.0);
+			// SDL_RenderDrawPoint(renderer, x, y);
 			for (const auto& Object : List) {
 				if (abs(x - Object.X) < 20 && abs(y - Object.Y) < 20)
 					RightCount++;
@@ -151,6 +150,4 @@ void Bird::Render(SDL_Renderer* Renderer){
 	ImgCenter.y = 15;
 
 	Img->render(Renderer, (int)xPos, (int)yPos, (SDL_Rect*)nullptr, Angle, &ImgCenter);
-	
-	//Angle -= 0.1;
 }

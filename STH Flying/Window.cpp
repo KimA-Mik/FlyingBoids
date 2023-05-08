@@ -49,14 +49,16 @@ bool Window::init(std::string Name, int WWidth, int WHeight, int XPos, int YPos)
 	}
 	mTimer.start();
 	srand(time(NULL));
+
+	Textures[0].loadFromFile(mRenderer, "Assets/BlueBird.png");
 	Textures[1].loadFromFile(mRenderer, "Assets/DarkBird.png");
-	Textures[3].loadFromFile(mRenderer, "Assets/PaleBlueBird.png");
 	Textures[2].loadFromFile(mRenderer, "Assets/GreenBird.png");
+	Textures[3].loadFromFile(mRenderer, "Assets/PaleBlueBird.png");
 	Textures[5].loadFromFile(mRenderer, "Assets/RedBird.png");
 	Textures[4].loadFromFile(mRenderer, "Assets/PurpleBird.png");
 	Textures[6].loadFromFile(mRenderer, "Assets/YellowBird.png");
 
-	for (int i = 0; i < 100; i++) {
+	for (int i = 0; i < 125; i++) {
 		int X = rand() % mWidth;
 		int Y = rand() % mHeight;
 		float Ang = rand() % 360 + 180;
@@ -65,12 +67,8 @@ bool Window::init(std::string Name, int WWidth, int WHeight, int XPos, int YPos)
 		Objects.push_back(std::make_unique<Bird>(X, Y, Ang, randTexture));
 		Objects[i]->SetScreenParams(mWidth, mHeight);
 
-
 		StatsList.push_back(Objects[i]->GetStats());
-
-	}	Textures[0].loadFromFile(mRenderer, "Assets/BlueBird.png");
-
-	
+	}	
 
 	return mWindow != nullptr && mRenderer != nullptr;
 }
@@ -79,22 +77,17 @@ void Window::handleEvent(SDL_Event& e)
 {
 	int w, h;
 	//If an event was detected for this window
-	if (e.type == SDL_WINDOWEVENT /*&& e.window.windowID == mWindowID*/ && LastEventTime != e.window.timestamp)
+	if (e.type == SDL_WINDOWEVENT && LastEventTime != e.window.timestamp)
 	{
-		//Caption update flag
-		bool updateCaption = false;
-
 		switch (e.window.event)
 		{
 			//Window appeared
 		case SDL_WINDOWEVENT_SHOWN:
-			SDL_Log("SDL_WINDOWEVENT_SHOWN\n");
 			mShown = true;
 			break;
 
 			//Window disappeared
 		case SDL_WINDOWEVENT_HIDDEN:
-			SDL_Log("SDL_WINDOWEVENT_HIDDEN\n");
 			//Freezes Linux
 			//mMinimized = true;
 			mShown = false;
@@ -102,45 +95,36 @@ void Window::handleEvent(SDL_Event& e)
 
 			//Get new dimensions and repaint
 		case SDL_WINDOWEVENT_SIZE_CHANGED:
-			SDL_Log("SDL_WINDOWEVENT_SIZE_CHANGED\n");
 			updateWindowSize(e.window.data1, e.window.data2);
 			break;
 
 			//Repaint on expose
 		case SDL_WINDOWEVENT_EXPOSED:
-			SDL_Log("SDL_WINDOWEVENT_EXPOSED\n");
 			SDL_RenderPresent(mRenderer);
 			break;
 
 			//Mouse enter
 		case SDL_WINDOWEVENT_ENTER:
 			mMouseFocus = true;
-			updateCaption = true;
 			break;
 
 			//Mouse exit
 		case SDL_WINDOWEVENT_LEAVE:
 			mMouseFocus = false;
-			updateCaption = true;
 			break;
 
 			//Keyboard focus gained
 		case SDL_WINDOWEVENT_FOCUS_GAINED:
-			SDL_Log("SDL_WINDOWEVENT_FOCUS_GAINED\n");
 			mKeyboardFocus = true;
-			updateCaption = true;
 			break;
 
 			//Keyboard focus lost
 		case SDL_WINDOWEVENT_FOCUS_LOST:
-			SDL_Log("SDL_WINDOWEVENT_FOCUS_LOST\n");
 			mKeyboardFocus = false;
-			updateCaption = true;
 			break;
 
 			//Window minimized
 		case SDL_WINDOWEVENT_MINIMIZED:
-			SDL_Log("SDL_WINDOWEVENT_MINIMIZED\n");
 			mMinimized = true;
 			break;
 
@@ -148,7 +132,6 @@ void Window::handleEvent(SDL_Event& e)
 		case SDL_WINDOWEVENT_MAXIMIZED:
 			// SDL_GL_GetDrawableSize(mWindow, &w, &h);
 			SDL_GetWindowSize(mWindow, &w, &h);
-			SDL_Log("SDL_WINDOWEVENT_MAXIMIZED(%d:%d)\n", w, h);
 			updateWindowSize(w, h);
 			mMinimized = false;
 			break;
@@ -158,21 +141,14 @@ void Window::handleEvent(SDL_Event& e)
 			// SDL_GL_GetDrawableSize(mWindow, &w, &h);
 			SDL_GetWindowSize(mWindow, &w, &h);
 			updateWindowSize(w, h);
-
-			SDL_Log("SDL_WINDOWEVENT_RESTORED(%d:%d)\n", w, h);
 			mMinimized = false;
 			break;
 
 			//Hide on close
 		case SDL_WINDOWEVENT_CLOSE:
-			SDL_Log("SDL_WINDOWEVENT_CLOSE\n");
 			mShown = false;
 			SDL_HideWindow(mWindow);
 			break;
-
-			default:
-			SDL_Log("%d", e.window.event);
-
 		}
 
 		LastEventTime = e.window.timestamp;
@@ -196,26 +172,23 @@ void Window::render()
 {
 	ElapsedTime = mTimer.getTicks() - PrevTime;
 	std::stringstream Title;
-	Title << "Awesome boids    FPS: " << int(1000 / ElapsedTime);
+	double fps = 1000.0 / (double)ElapsedTime;
+	Title << "Awesome boids    FPS: " << (int)fps;
 	SDL_SetWindowTitle(mWindow, Title .str().c_str());
 	PrevTime = mTimer.getTicks();
 	
 	if (!mMinimized)
 	{
-		//Clear screen
 		SDL_SetRenderDrawColor(mRenderer, 245, 246, 250, 255);
-		SDL_RenderClear(mRenderer);
+		SDL_RenderClear(mRenderer);	
 		
-		for (int i = 0; i < Objects.size(); i++)
+		for (long unsigned int i = 0; i < Objects.size(); i++) {
 			StatsList[i] = Objects[i]->GetStats();
-		
-		for (int i = 0; i < Objects.size(); i++) {
 			Objects[i]->CheckCollisions(StatsList, ElapsedTime, mRenderer);
 			Objects[i]->Move(ElapsedTime);
 			Objects[i]->Render(mRenderer);
 		}
 
-		//Update screen
 		SDL_RenderPresent(mRenderer);
 	}
 }
@@ -224,8 +197,9 @@ void Window::updateWindowSize(int width, int height)
 {
 	mWidth = width;
 	mHeight = height;
-	for (int i = 0; i < Objects.size(); i++) 
-				Objects[i]->SetScreenParams(mWidth, mHeight);
+
+	for (auto& object : Objects)
+		object->SetScreenParams(mWidth, mHeight);
 			SDL_RenderPresent(mRenderer);
 }
 

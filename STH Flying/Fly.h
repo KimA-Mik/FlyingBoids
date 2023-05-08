@@ -13,6 +13,12 @@ struct ObjStats
 	double Angle;
 };
 
+struct dPoint
+{
+	double x;
+	double y;
+};
+
 class Fly{
 protected:
 	SDL_Point ImgCenter;
@@ -55,9 +61,6 @@ public:
 
 class Bird : public Fly
 {
-private:
-	
-
 public:
 	Bird(int x, int y, double Ang, Texture* texture);
 	
